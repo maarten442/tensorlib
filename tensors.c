@@ -40,8 +40,9 @@ typedef struct {
 typedef struct {
     Storage* storage;
     int offset;
-    int stride;
-    int size;
+    int* strides;
+    int* dims;
+    int ndims;
     char* repr;
 } GradientTensor;
 
@@ -49,8 +50,9 @@ typedef struct {
     Storage* storage;
     GradientTensor* grad;
     int offset;
-    int stride;
-    int size;
+    int* strides; // array of strides for each dim
+    int* dims;
+    int ndims;
     char* repr;
     bool require_grad;
     bool is_leaf;
@@ -105,4 +107,6 @@ void storage_decref(Storage* s) {
 }
 
 // Create actual tensors
+// torch.empty(size);
 
+Tensor* create_tensor(int size) {}
