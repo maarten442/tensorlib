@@ -106,7 +106,17 @@ void storage_decref(Storage* s) {
     }
 }
 
-// Create actual tensors
+// Create actual tensors. Torch has many ways of doing this. Let's implement a bunch.
 // torch.empty(size);
 
-Tensor* create_tensor(int size) {}
+// Helper function to compute the dimensionality of the tensor. 
+
+Tensor* tensor_empty(int size) {
+    // Assert is already done in creating the memory.
+    // Create underlying storage. 
+    Storage* s = create_storage(size);
+    Tensor* t = mallocCheck(sizeof(Tensor));
+    t->dims = mallocCheck(sizeof(int));
+    t->ndims = 1; 
+   
+}
