@@ -70,3 +70,34 @@ Storage* create_storage(int size) {
     s->data = t;
     return s; 
 }
+
+// Function to index into the array of floats and set an element
+
+void set_storage(Storage* s, float item, int idx) {
+    assert(idx >= 0);
+    s->data[idx] = item;
+}
+
+// Function to index into the array of floats and get an element
+
+float get_storage(Storage* s, int idx) {
+    assert(idx >= 0);
+    return s->data[idx];
+}
+
+// Increment reference count
+
+void storage_incref(Storage* s) {
+    s->ref_count++;
+}
+
+// Decrement reference count
+// If the ref count is 0, no views on storage. Free the memory for the array and the Storage
+
+void storage_decref(Storage* s) {
+    s->ref_count--;
+    if(s->ref_count == 0) {
+        free(s->data);
+        free(s);
+    }
+}
