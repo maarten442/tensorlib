@@ -57,3 +57,16 @@ typedef struct {
     Function* grad_fn;
 } Tensor;
 
+// Function to create actual memory for the arangement of tensors. 
+
+Storage* create_storage(int size) {
+    assert(size >=0);
+    // first malloc a storage object.
+
+    Storage* s = mallocCheck(sizeof(Storage));
+    float* t = mallocCheck(size * sizeof(float));
+
+    // If both succeeded set the data in s to t. 
+    s->data = t;
+    return s; 
+}
