@@ -68,6 +68,8 @@ Storage* create_storage(int size) {
 
     // If both succeeded set the data in s to t. 
     s->data = t;
+    s->ref_count = 1;
+    s->size = size;
     return s; 
 }
 
@@ -101,3 +103,6 @@ void storage_decref(Storage* s) {
         free(s);
     }
 }
+
+// Create actual tensors
+
