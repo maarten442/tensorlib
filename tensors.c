@@ -107,6 +107,13 @@ void storage_decref(Storage* s) {
 }
 
 // Create actual tensors. Torch has many ways of doing this. Let's implement a bunch.
+
+// We need ways to get and set items on the storage from the view. 
+
+void tensor_setitem(Tensor* t, int* idx, int idx_size, float item) {
+    // we need to pass the index size to ensure dimensionalities are the same. 
+
+}
 // torch.empty(size);
 
 // Helper function to compute the dimensionality of the tensor. 
