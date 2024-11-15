@@ -140,9 +140,11 @@ Tensor* tensor_empty(int size) {
     Storage* s = create_storage(size);
     Tensor* t = mallocCheck(sizeof(Tensor));
 
+    t->storage = s;
     // dimensionality
+
     t->dims = mallocCheck(sizeof(int)); 
-    t->dims[0] = size;
+    t->dims[0] = size; // 3 x 3 x 4 for example.
     t->ndims = 1;
     t->offset = 0;
     t->strides = mallocCheck(sizeof(int));
@@ -159,11 +161,13 @@ Tensor* tensor_empty(int size) {
     return t; 
 }
 
-// torch.arrange initially always creates a 1d tensor. 
-// If we want to change dimensionality we need to reshape the tensor. 
+// torch.arrange()
+
 Tensor* tensor_arrange(int size) {
     Tensor* t = tensor_empty(size);
-    for(int i = 1; i <= size; i++) {
-
+    for(int i = 0; i < size; i++) {
+        tensor_setitem(t, i, 1, (float) i);
     }
+    t->repr = "Set from arrange";
+    return t;
 }
