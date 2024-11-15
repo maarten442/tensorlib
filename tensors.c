@@ -136,6 +136,13 @@ Tensor* tensor_arrange(int size) {
     return t;
 }
 
+Tensor* reshape(Tensor* t, int* strides, int* dims, int ndims) {
+    t->dims = dims;
+    t->ndims = ndims;
+    t->strides = strides;
+    return t;
+}
+
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         printf("Usage: %s <size>\n", argv[0]);
@@ -146,5 +153,16 @@ int main(int argc, char *argv[]) {
     printf("Hello from inside the tensor %s\n", t->repr);
     for(int i = 0; i<t->dims[0]; i++) {
         printf("%d ", (int) tensor_getitem(t, &i, 1));
+    }
+    printf("Reshaping the tensor\n");
+    int dims[] = {3, 3};
+    int strides[] = {3, 3};
+
+    reshape(t, strides, dims, 2);
+    for(int i = 0; i<t->dims[0]; i++) {
+       for(int j =0; j<t->dims[1]; j++) {
+        int idx[] = {i, j};
+        printf("%d ", (int) tensor_getitem(t, idx, 2));
+        }
     }
 }
