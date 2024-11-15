@@ -39,7 +39,7 @@ typedef struct {
 
 typedef struct {
     Storage* storage;
-    int* offset;
+    int offset;
     int* strides;
     int* dims;
     int ndims;
@@ -49,7 +49,7 @@ typedef struct {
 typedef struct {
     Storage* storage;
     GradientTensor* grad;
-    int* offset;
+    int offset;
     int* strides; // array of strides for each dim
     int* dims;
     int ndims;
@@ -108,7 +108,19 @@ void storage_decref(Storage* s) {
 
 // Create actual tensors. Torch has many ways of doing this. Let's implement a bunch.
 
-// We need ways to get and set items on the storage from the view. 
+float logical_to_physical(Tensor* t, int* idx) {
+    int result = t->offset;
+    for(int i = 0; i < t->ndims; i++) {
+        result += idx[i] * t->strides[i];
+    }
+    return t->storage->data[result];   
+}
+
+
+void tensor_getitem(Tensor* t) {
+
+}
+
 
 void tensor_setitem(Tensor* t, int* idx, int idx_size, float item) {
     // we need to pass the index size to ensure dimensionalities are the same. 
