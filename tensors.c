@@ -141,7 +141,7 @@ Tensor* tensor_empty(int size) {
     t->dims[0] = size;
     t->ndims = 1;
     t->offset = mallocCheck(sizeof(int));
-    t->offset[0] = 0;
+    t->offset = 0;
 
     // gradient related
     t->grad = NULL;
