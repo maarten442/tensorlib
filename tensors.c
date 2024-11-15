@@ -108,12 +108,12 @@ void storage_decref(Storage* s) {
 
 // Create actual tensors. Torch has many ways of doing this. Let's implement a bunch.
 
-float logical_to_physical(Tensor* t, int* idx) {
+int logical_to_physical(Tensor* t, int* idx) {
     int result = t->offset;
     for(int i = 0; i < t->ndims; i++) {
         result += idx[i] * t->strides[i];
     }
-    return t->storage->data[result];   
+    return result;   
 }
 
 
