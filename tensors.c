@@ -145,6 +145,6 @@ int main() {
     Tensor* t = tensor_arrange(10);
     printf("Hello from inside the tensor %s\n", t->repr);
     for(int i = 0; i<10; i++) {
-        printf("%d", tensor_getitem(t, &i, 1));
+        printf("%d ", (int) tensor_getitem(t, &i, 1));
     }
 }
