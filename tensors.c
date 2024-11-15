@@ -138,9 +138,6 @@ Tensor* tensor_arrange(int size) {
     return t;
 }
 
-
-// NEED TO FIX IDX ARRAY IS A POINTER
-
 int main() {
     Tensor* t = tensor_arrange(10);
     printf("Hello from inside the tensor %s\n", t->repr);
