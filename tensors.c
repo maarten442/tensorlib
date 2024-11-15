@@ -23,21 +23,6 @@ void* malloc_check(int size, char* file, int line) {
 #define mallocCheck(size) malloc_check(size, __FILE__, __LINE__)
 
 // Storage physically stores the values in contiguous memory. Can be referenced by multiple tensors. 
-
-typedef struct {
-    float* data;
-    int size;
-    int ref_count;
-} Storage;
-
-typedef struct {
-    Tensor** inputs;
-    Tensor* output;
-    int num_inputs;
-    void (*backward)(struct Function* self, Tensor* output);
-    // Something to destroy resources?
-} Function;
-
 typedef struct {
     Storage* storage;
     int offset;
@@ -59,6 +44,20 @@ typedef struct {
     bool is_leaf;
     Function* grad_fn;
 } Tensor;
+
+typedef struct {
+    float* data;
+    int size;
+    int ref_count;
+} Storage;
+
+typedef struct {
+    Tensor** inputs;
+    Tensor* output;
+    int num_inputs;
+    void (*backward)(struct Function* self, Tensor* output);
+    // Something to destroy resources?
+} Function;
 
 // Function to create actual memory for the arangement of tensors. 
 
@@ -170,4 +169,9 @@ Tensor* tensor_arrange(int size) {
     }
     t->repr = "Set from arrange";
     return t;
+}
+
+int main() {
+    Tensor* t = tensor_arrange(10);
+    printf("Hello from inside the tensor %s\n", t->repr);
 }
