@@ -114,7 +114,7 @@ Tensor* tensor_empty(int size) {
     t->ndims = 1;
     t->offset = 0;
     t->strides = mallocCheck(sizeof(int));
-    t->strides = 0;
+    t->strides[0] = 1;
 
     // gradient related
     t->grad = NULL;
@@ -132,7 +132,7 @@ Tensor* tensor_empty(int size) {
 Tensor* tensor_arrange(int size) {
     Tensor* t = tensor_empty(size);
     for(int i = 0; i < size; i++) {
-        tensor_setitem(t, i, 1, (float) i);
+        tensor_setitem(t, &i, 1, (float) i);
     }
     t->repr = "Set from arrange";
     return t;
