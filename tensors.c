@@ -117,8 +117,11 @@ int logical_to_physical(Tensor* t, int* idx) {
 }
 
 
-void tensor_getitem(Tensor* t) {
-
+float tensor_getitem(Tensor* t, int* idx, int idx_size) {
+    assert(idx_size == t->ndims);
+    // TODO add negative index suport
+    int pidx = logical_to_physical(t, idx);
+    return t->storage->data[pidx];
 }
 
 
