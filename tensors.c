@@ -116,7 +116,29 @@ Tensor* tensor_empty(int size) {
     // Create underlying storage. 
     Storage* s = create_storage(size);
     Tensor* t = mallocCheck(sizeof(Tensor));
-    t->dims = mallocCheck(sizeof(int));
-    t->ndims = 1; 
-   
+
+    // dimensionality
+    t->dims = mallocCheck(sizeof(int)); 
+    t->dims[0] = size;
+    t->ndims = 1;
+    t->offset = 0;
+
+    // gradient related
+    t->grad = NULL;
+    t->grad_fn = NULL;
+    t->require_grad = false;
+    t->is_leaf = false;
+
+    // other
+    t->repr = NULL;
+    
+}
+
+// torch.arrange initially always creates a 1d tensor. 
+// If we want to change dimensionality we need to reshape the tensor. 
+Tensor* tensor_arrange(int size) {
+    Tensor* t = tensor_empty(size);
+    for(int i = 1; i <= size; i++) {
+
+    }
 }
