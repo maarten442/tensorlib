@@ -8,6 +8,7 @@
 // We use fprintf to write to the standard error instead of the standard output. 
 // Program needs to terminate immediately upon failed malloc, so we use exit. 
 
+// TODO: fix partial allocation failures here. 
 void* malloc_check(int size, char* file, int line) {
     void* ptr = malloc(size);
     if (ptr ==0) {
@@ -143,18 +144,19 @@ Tensor* tensor_empty(int size) {
     t->dims = mallocCheck(sizeof(int)); 
     t->dims[0] = size;
     t->ndims = 1;
-    t->offset = mallocCheck(sizeof(int));
     t->offset = 0;
+    t->strides = mallocCheck(sizeof(int));
+    t->strides = 0;
 
     // gradient related
     t->grad = NULL;
     t->grad_fn = NULL;
     t->require_grad = false;
-    t->is_leaf = false;
+    t->is_leaf = true;
 
     // other
     t->repr = NULL;
-    
+    return t; 
 }
 
 // torch.arrange initially always creates a 1d tensor. 
