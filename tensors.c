@@ -121,13 +121,13 @@ float tensor_getitem(Tensor* t, int* idx, int idx_size) {
     assert(idx_size == t->ndims);
     // TODO add negative index suport
     int pidx = logical_to_physical(t, idx);
-    return t->storage->data[pidx];
+    return get_storage(t->storage, pidx);
 }
 
-
 void tensor_setitem(Tensor* t, int* idx, int idx_size, float item) {
-    // we need to pass the index size to ensure dimensionalities are the same. 
-
+    assert(idx_size == t->ndims);
+    int pidx = logical_to_physical(t, idx);
+    set_storage(t->storage, item, pidx);
 }
 // torch.empty(size);
 
