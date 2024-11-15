@@ -138,10 +138,15 @@ Tensor* tensor_arrange(int size) {
     return t;
 }
 
-int main() {
-    Tensor* t = tensor_arrange(10);
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Usage: %s <size>\n", argv[0]);
+        return 1;
+    }
+    int size = atoi(argv[1]);
+    Tensor* t = tensor_arrange(size);
     printf("Hello from inside the tensor %s\n", t->repr);
-    for(int i = 0; i<10; i++) {
+    for(int i = 0; i<t->dims[0]; i++) {
         printf("%d ", (int) tensor_getitem(t, &i, 1));
     }
 }
