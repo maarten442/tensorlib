@@ -83,7 +83,6 @@ int logical_to_physical(Tensor* t, int* idx) {
     return result;   
 }
 
-
 float tensor_getitem(Tensor* t, int* idx, int idx_size) {
     assert(idx_size == t->ndims);
     // TODO add negative index suport
@@ -96,9 +95,8 @@ void tensor_setitem(Tensor* t, int* idx, int idx_size, float item) {
     int pidx = logical_to_physical(t, idx);
     set_storage(t->storage, item, pidx);
 }
-// torch.empty(size);
 
-// Helper function to compute the dimensionality of the tensor. 
+// torch.empty(size);
 
 Tensor* tensor_empty(int size) {
     // Assert is already done in creating the memory.
