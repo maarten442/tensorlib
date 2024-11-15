@@ -1,5 +1,13 @@
-#ifndef HEADER_H   // If HEADER_H is not defined
-#define HEADER_H   // Define it
+#ifndef TENSORS_H
+#define TENSORS_H
+
+typedef struct {
+    float* data;
+    int size;
+    int ref_count;
+} Storage;
+
+typedef struct Function Function;  // Forward declaration
 
 typedef struct {
     Storage* storage;
@@ -14,7 +22,7 @@ typedef struct {
     Storage* storage;
     GradientTensor* grad;
     int offset;
-    int* strides; // array of strides for each dim
+    int* strides;
     int* dims;
     int ndims;
     char* repr;
@@ -23,18 +31,11 @@ typedef struct {
     Function* grad_fn;
 } Tensor;
 
-typedef struct {
-    float* data;
-    int size;
-    int ref_count;
-} Storage;
-
-typedef struct {
+struct Function {
     Tensor** inputs;
     Tensor* output;
     int num_inputs;
     void (*backward)(struct Function* self, Tensor* output);
-    // Something to destroy resources?
-} Function;
+};
 
-#endif // HEADER_H
+#endif // TENSORS_H

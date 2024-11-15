@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <assert.h>
+#include "tensors.h"
 
 // Create a wrapper around malloc for save memory allocation, as per Karpathy. 
 // We use fprintf to write to the standard error instead of the standard output. 
@@ -23,41 +24,7 @@ void* malloc_check(int size, char* file, int line) {
 #define mallocCheck(size) malloc_check(size, __FILE__, __LINE__)
 
 // Storage physically stores the values in contiguous memory. Can be referenced by multiple tensors. 
-typedef struct {
-    Storage* storage;
-    int offset;
-    int* strides;
-    int* dims;
-    int ndims;
-    char* repr;
-} GradientTensor;
 
-typedef struct {
-    Storage* storage;
-    GradientTensor* grad;
-    int offset;
-    int* strides; // array of strides for each dim
-    int* dims;
-    int ndims;
-    char* repr;
-    bool require_grad;
-    bool is_leaf;
-    Function* grad_fn;
-} Tensor;
-
-typedef struct {
-    float* data;
-    int size;
-    int ref_count;
-} Storage;
-
-typedef struct {
-    Tensor** inputs;
-    Tensor* output;
-    int num_inputs;
-    void (*backward)(struct Function* self, Tensor* output);
-    // Something to destroy resources?
-} Function;
 
 // Function to create actual memory for the arangement of tensors. 
 
