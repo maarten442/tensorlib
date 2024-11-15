@@ -39,7 +39,7 @@ typedef struct {
 
 typedef struct {
     Storage* storage;
-    int offset;
+    int* offset;
     int* strides;
     int* dims;
     int ndims;
@@ -49,7 +49,7 @@ typedef struct {
 typedef struct {
     Storage* storage;
     GradientTensor* grad;
-    int offset;
+    int* offset;
     int* strides; // array of strides for each dim
     int* dims;
     int ndims;
@@ -121,7 +121,8 @@ Tensor* tensor_empty(int size) {
     t->dims = mallocCheck(sizeof(int)); 
     t->dims[0] = size;
     t->ndims = 1;
-    t->offset = 0;
+    t->offset = mallocCheck(sizeof(int));
+    t->offset[0] = 0;
 
     // gradient related
     t->grad = NULL;
