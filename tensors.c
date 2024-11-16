@@ -180,7 +180,7 @@ void free_tensor(Tensor* t) {
     // Free all member pointers with NULL checks
     if (t->dims != NULL) free(t->dims);
     if (t->grad != NULL) free(t->grad);
-    // if (t->repr != NULL) free(t->repr);
+    if (t->repr != NULL) free(t->repr);
     if (t->strides != NULL) free(t->strides);
     if (t->grad_fn != NULL) free(t->grad_fn);
 
