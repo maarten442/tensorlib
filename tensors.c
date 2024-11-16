@@ -33,10 +33,10 @@ Storage* create_storage(int size) {
     // first malloc a storage object.
 
     Storage* s = mallocCheck(sizeof(Storage));
-    float* t = mallocCheck(size * sizeof(float));
+    float* d = mallocCheck(size * sizeof(float));
 
     // If both succeeded set the data in s to t. 
-    s->data = t;
+    s->data = d;
     s->ref_count = 1;
     s->size = size;
     return s; 
@@ -45,14 +45,14 @@ Storage* create_storage(int size) {
 // Function to index into the array of floats and set an element
 
 void set_storage(Storage* s, float item, int idx) {
-    assert(idx >= 0);
+    assert(idx >= 0 && idx < s->size);
     s->data[idx] = item;
 }
 
 // Function to index into the array of floats and get an element
 
 float get_storage(Storage* s, int idx) {
-    assert(idx >= 0);
+    assert(idx >= 0 && idx < s->size);
     return s->data[idx];
 }
 
