@@ -132,7 +132,7 @@ Tensor* tensor_arrange(int size) {
     for(int i = 0; i < size; i++) {
         tensor_setitem(t, &i, 1, (float) i);
     }
-    t->repr = "Set from arrange";
+    t->repr = NULL;
     return t;
 }
 
@@ -159,7 +159,7 @@ Tensor* reshape(Tensor* t, int* dims, int ndims) {
     new_t -> offset = t -> offset;
     new_t -> grad_fn = NULL;
     new_t -> is_leaf = true;
-    new_t->repr = "I am reshaped!";
+    new_t->repr = NULL;
 
     return new_t;
 }
