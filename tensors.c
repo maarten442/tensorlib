@@ -164,6 +164,30 @@ Tensor* reshape(Tensor* t, int* dims, int ndims) {
     return new_t;
 }
 
+// we need a function to free the tensor
+
+void free_tensor(Tensor* t) {
+    // First check if tensor exists
+    if (t == NULL) {
+        return;
+    }
+
+    // Handle storage reference counting
+    if (t->storage != NULL) {  // Defensive check
+        storage_decref(t->storage);
+    }
+
+    // Free all member pointers with NULL checks
+    if (t->dims != NULL) free(t->dims);
+    if (t->grad != NULL) free(t->grad);
+    if (t->repr != NULL) free(t->repr);
+    if (t->strides != NULL) free(t->strides);
+    if (t->grad_fn != NULL) free(t->grad_fn);
+
+    // Finally free the tensor struct itself
+    free(t);
+}
+
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         printf("Usage: %s <size>\n", argv[0]);
