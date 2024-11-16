@@ -4,7 +4,7 @@
 #include <math.h>
 #include <assert.h>
 #include "tensors.h"
-
+#include <string.h>
 // Create a wrapper around malloc for save memory allocation, as per Karpathy. 
 // We use fprintf to write to the standard error instead of the standard output. 
 // Program needs to terminate immediately upon failed malloc, so we use exit. 
@@ -159,7 +159,7 @@ Tensor* reshape(Tensor* t, int* dims, int ndims) {
     new_t -> offset = t -> offset;
     new_t -> grad_fn = NULL;
     new_t -> is_leaf = true;
-    new_t -> repr = "I am reshaped!";
+    new_t->repr = "I am reshaped!";
 
     return new_t;
 }
@@ -180,13 +180,17 @@ void free_tensor(Tensor* t) {
     // Free all member pointers with NULL checks
     if (t->dims != NULL) free(t->dims);
     if (t->grad != NULL) free(t->grad);
-    if (t->repr != NULL) free(t->repr);
+    // if (t->repr != NULL) free(t->repr);
     if (t->strides != NULL) free(t->strides);
     if (t->grad_fn != NULL) free(t->grad_fn);
 
     // Finally free the tensor struct itself
     free(t);
 }
+
+
+// ***** IF YOU SET REPR USE A MALLOC BECAUSE STRING LITERALS GO TO THE 
+// ***** DATA SECTION IN MEMORY AND CANNOT GET FREED!
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -214,7 +218,6 @@ int main(int argc, char *argv[]) {
     int idx[] = {2, 2};
     printf("%d", (int) tensor_getitem(t_new, idx, 2));
 
-    // free(dims);
-    // free_tensor(t);
-    // free_tensor(t_new);
+    free_tensor(t);
+    free_tensor(t_new);
 }
