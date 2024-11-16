@@ -215,6 +215,6 @@ int main(int argc, char *argv[]) {
     printf("%d", (int) tensor_getitem(t_new, idx, 2));
 
     free(dims);
-    free(t);
-    free(t_new);
+    free_tensor(t);
+    free_tensor(t_new);
 }
