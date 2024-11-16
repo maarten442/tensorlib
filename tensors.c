@@ -146,10 +146,9 @@ int* compute_strides(int* dims, int ndims) {
     return strides;
 }
 
-Tensor* reshape(Tensor* t, int* strides, int* dims, int ndims) {
-    t->dims = dims;
-    t->ndims = ndims;
-    t->strides = compute_strides(dims, ndims);
+Tensor* reshape(Tensor* t, int* dims, int ndims) {
+    // you get an array, you need to put it on the stack
+
     return t;
 }
 
