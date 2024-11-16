@@ -147,9 +147,21 @@ int* compute_strides(int* dims, int ndims) {
 }
 
 Tensor* reshape(Tensor* t, int* dims, int ndims) {
-    // you get an array, you need to put it on the stack
+    // you get an array, you need to put it on the stack 
+    Tensor* new_t = mallocCheck(sizeof(Tensor));
+    new_t -> storage = t->storage;
+    storage_incref(t->storage);
 
-    return t;
+    new_t -> dims = dims; // give a heap pointer!
+    new_t -> ndims = ndims;
+    new_t -> strides = compute_strides(dims, ndims);
+    new_t -> require_grad = false;
+    new_t -> offset = t -> offset;
+    new_t -> grad_fn = NULL;
+    new_t -> is_leaf = true;
+    new_t -> repr = "I am reshaped!";
+
+    return new_t;
 }
 
 int main(int argc, char *argv[]) {
