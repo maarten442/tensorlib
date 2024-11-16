@@ -176,14 +176,17 @@ int main(int argc, char *argv[]) {
         printf("%d ", (int) tensor_getitem(t, &i, 1));
     }
     printf("Reshaping the tensor\n");
-    int dims[] = {3, 3};
-    int strides[] = {3, 3};
-
-    reshape(t, strides, dims, 2);
-    for(int i = 0; i<t->dims[0]; i++) {
-       for(int j =0; j<t->dims[1]; j++) {
+    int* dims = mallocCheck(2 * sizeof(int));
+    dims[0] = 3;
+    dims[1] = 3;
+    Tensor* t_new = reshape(t, dims, 2);
+    for(int i = 0; i<t_new->dims[0]; i++) {
+       for(int j =0; j<t_new->dims[1]; j++) {
         int idx[] = {i, j};
-        printf("%d ", (int) tensor_getitem(t, idx, 2));
+        printf("%d ", (int) tensor_getitem(t_new, idx, 2));
         }
+        printf("\n");
     }
+    int idx[] = {2, 2};
+    printf("%d", (int) tensor_getitem(t_new, idx, 2));
 }
