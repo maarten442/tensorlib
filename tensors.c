@@ -136,10 +136,20 @@ Tensor* tensor_arrange(int size) {
     return t;
 }
 
+int* compute_strides(int* dims, int ndims) {
+    int* strides = mallocCheck(ndims * sizeof(int));
+    strides[ndims - 1] = 1;
+
+    for(int i = ndims-2; i >= 0; i--) {
+        strides[i] = dims[i+1] * strides[i+1];
+    }
+    return strides;
+}
+
 Tensor* reshape(Tensor* t, int* strides, int* dims, int ndims) {
     t->dims = dims;
     t->ndims = ndims;
-    t->strides = strides;
+    t->strides = compute_strides(dims, ndims);
     return t;
 }
 
