@@ -160,7 +160,7 @@ Tensor* tensor_arrange_multidimensional(int* dims, int ndims) {
     for (int i = 0; i < size; i++) {
         set_storage(storage, (float)i, i);  // <-- This was missing!
     }
-    
+    t->storage = storage;    
     int* dimension = mallocCheck(ndims * sizeof(int));
     // copy the dims into this dimensions
     memcpy(dimension, dims, ndims * sizeof(int));
@@ -274,13 +274,13 @@ int main(int argc, char *argv[]) {
 
     // free_tensor(t);
     // free_tensor(t_new);
-    int dims[] = {3,3};
+    int dims[] = {3, 3};
     int ndims = 2;
     Tensor* t = tensor_arrange_multidimensional(dims, ndims);
-    for(int i = 0; i<t->dims[0]; i++) {
-       for(int j =0; j<t->dims[1]; j++) {
-        int idx[] = {i, j};
-        printf("%d ", (int) tensor_getitem(t, idx, 2));
+    for(int i = 0; i < t->dims[0]; i++) {
+        for(int j = 0; j < t->dims[1]; j++) {
+            int idx[] = {i, j};
+            printf("%d ", (int)tensor_getitem(t, idx, 2));
         }
         printf("\n");
     }
