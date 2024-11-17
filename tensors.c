@@ -137,6 +137,15 @@ Tensor* tensor_arrange(int size) {
 }
 
 // Create a tensor with multidimensional initialization 
+int* compute_strides(int* dims, int ndims) {
+    int* strides = mallocCheck(ndims * sizeof(int));
+    strides[ndims - 1] = 1;
+
+    for(int i = ndims-2; i >= 0; i--) {
+        strides[i] = dims[i+1] * strides[i+1];
+    }
+    return strides;
+}
 
 Tensor* tensor_arrange_multidimensional(int* dims, int ndims) {
     int size = 1;
@@ -151,7 +160,7 @@ Tensor* tensor_arrange_multidimensional(int* dims, int ndims) {
     memcpy(dimension, dims, ndims * sizeof(int));
     t->dims = dimension;
 
-    int* str = compute_strides(dims, ndims);
+    int* str = compute_strides(t->dims, ndims);
     int* strides = mallocCheck(ndims * sizeof(int));
     memcpy(strides, str, ndims * sizeof(int));
     t->strides = strides;
@@ -168,16 +177,6 @@ Tensor* tensor_arrange_multidimensional(int* dims, int ndims) {
 
     return t;
 
-}
-
-int* compute_strides(int* dims, int ndims) {
-    int* strides = mallocCheck(ndims * sizeof(int));
-    strides[ndims - 1] = 1;
-
-    for(int i = ndims-2; i >= 0; i--) {
-        strides[i] = dims[i+1] * strides[i+1];
-    }
-    return strides;
 }
 
 Tensor* reshape(Tensor* t, int* dims, int ndims) {
@@ -224,50 +223,60 @@ void free_tensor(Tensor* t) {
 
 // Tensor operations
 
-Tensor* add_tensors(Tensor* t_1, Tensor* t_2) {
-    if (t_1->ndims != t_2->ndims) {
-        fprintf(stderr, "The tensors must have the same number of dimensions!");
-        return 1;
-    }
+// Tensor* add_tensors(Tensor* t_1, Tensor* t_2) {
+//     if (t_1->ndims != t_2->ndims) {
+//         fprintf(stderr, "The tensors must have the same number of dimensions!");
+//         exit(EXIT_FAILURE);
+//     }
 
-    for (int i = 0; i < t_1->dims; i++) {
-        if(t_1->dims[i] != t_2->dims[i]) {
-            fprintf(stderr, "The tensors must have the same dimensionality!");
-            return 1;
-        }
-    // IMPLEMENET A FUNCTION THAT CAN CREATE A TENSOR WITH DIMS. 
-    }
-}
+//     for (int i = 0; i < t_1->dims; i++) {
+//         if(t_1->dims[i] != t_2->dims[i]) {
+//             fprintf(stderr, "The tensors must have the same dimensionality!");
+//             exit(EXIT_FAILURE);
+//         }
+//     // IMPLEMENET A FUNCTION THAT CAN CREATE A TENSOR WITH DIMS. 
+//     }
+// }
 
 // ***** IF YOU SET REPR USE A MALLOC BECAUSE STRING LITERALS GO TO THE 
 // ***** DATA SECTION IN MEMORY AND CANNOT GET FREED!
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        printf("Usage: %s <size>\n", argv[0]);
-        return 1;
-    }
-    int size = atoi(argv[1]);
-    Tensor* t = tensor_arrange(size);
-    printf("Hello from inside the tensor %s\n", t->repr);
+    // if (argc != 2) {
+    //     printf("Usage: %s <size>\n", argv[0]);
+    //     return 1;
+    // }
+    // int size = atoi(argv[1]);
+    // Tensor* t = tensor_arrange(size);
+    // printf("Hello from inside the tensor %s\n", t->repr);
+    // for(int i = 0; i<t->dims[0]; i++) {
+    //     printf("%d ", (int) tensor_getitem(t, &i, 1));
+    // }
+    // printf("Reshaping the tensor\n");
+    // int* dims = mallocCheck(2 * sizeof(int));
+    // dims[0] = 3;
+    // dims[1] = 3;
+    // Tensor* t_new = reshape(t, dims, 2);
+    // for(int i = 0; i<t_new->dims[0]; i++) {
+    //    for(int j =0; j<t_new->dims[1]; j++) {
+    //     int idx[] = {i, j};
+    //     printf("%d ", (int) tensor_getitem(t_new, idx, 2));
+    //     }
+    //     printf("\n");
+    // }
+    // int idx[] = {2, 2};
+    // printf("%d", (int) tensor_getitem(t_new, idx, 2));
+
+    // free_tensor(t);
+    // free_tensor(t_new);
+    int dims[] = {3,3};
+    int ndims = 3;
+    Tensor* t = tensor_arrange_multidimensional(dims, ndims);
     for(int i = 0; i<t->dims[0]; i++) {
-        printf("%d ", (int) tensor_getitem(t, &i, 1));
-    }
-    printf("Reshaping the tensor\n");
-    int* dims = mallocCheck(2 * sizeof(int));
-    dims[0] = 3;
-    dims[1] = 3;
-    Tensor* t_new = reshape(t, dims, 2);
-    for(int i = 0; i<t_new->dims[0]; i++) {
-       for(int j =0; j<t_new->dims[1]; j++) {
+       for(int j =0; j<t->dims[1]; j++) {
         int idx[] = {i, j};
-        printf("%d ", (int) tensor_getitem(t_new, idx, 2));
+        printf("%d ", (int) tensor_getitem(t, idx, 2));
         }
         printf("\n");
     }
-    int idx[] = {2, 2};
-    printf("%d", (int) tensor_getitem(t_new, idx, 2));
-
-    free_tensor(t);
-    free_tensor(t_new);
 }
