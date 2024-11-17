@@ -159,7 +159,7 @@ Tensor* tensor_arrange_multidimensional(int* dims, int ndims) {
     // copy the dims into this dimensions
     memcpy(dimension, dims, ndims * sizeof(int));
     t->dims = dimension;
-
+    t->ndims = ndims;
     int* str = compute_strides(t->dims, ndims);
     int* strides = mallocCheck(ndims * sizeof(int));
     memcpy(strides, str, ndims * sizeof(int));
@@ -270,7 +270,7 @@ int main(int argc, char *argv[]) {
     // free_tensor(t);
     // free_tensor(t_new);
     int dims[] = {3,3};
-    int ndims = 3;
+    int ndims = 2;
     Tensor* t = tensor_arrange_multidimensional(dims, ndims);
     for(int i = 0; i<t->dims[0]; i++) {
        for(int j =0; j<t->dims[1]; j++) {
