@@ -290,4 +290,7 @@ int main(int argc, char *argv[]) {
         }
         printf("\n");
     }
+    free_tensor(t);
+    free_tensor(t_2);
+    free_tensor(new);
 }
