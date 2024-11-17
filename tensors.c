@@ -136,6 +136,12 @@ Tensor* tensor_arrange(int size) {
     return t;
 }
 
+// Create a tensor with multidimensional initialization 
+
+Tensor* tensor_arrange_multidimensional() {
+    return 0;
+}
+
 int* compute_strides(int* dims, int ndims) {
     int* strides = mallocCheck(ndims * sizeof(int));
     strides[ndims - 1] = 1;
@@ -188,6 +194,22 @@ void free_tensor(Tensor* t) {
     free(t);
 }
 
+// Tensor operations
+
+Tensor* add_tensors(Tensor* t_1, Tensor* t_2) {
+    if (t_1->ndims != t_2->ndims) {
+        fprintf(stderr, "The tensors must have the same number of dimensions!");
+        return 1;
+    }
+
+    for (int i = 0; i < t_1->dims; i++) {
+        if(t_1->dims[i] != t_2->dims[i]) {
+            fprintf(stderr, "The tensors must have the same dimensionality!");
+            return 1;
+        }
+    // IMPLEMENET A FUNCTION THAT CAN CREATE A TENSOR WITH DIMS. 
+    }
+}
 
 // ***** IF YOU SET REPR USE A MALLOC BECAUSE STRING LITERALS GO TO THE 
 // ***** DATA SECTION IN MEMORY AND CANNOT GET FREED!
