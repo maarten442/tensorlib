@@ -138,8 +138,36 @@ Tensor* tensor_arrange(int size) {
 
 // Create a tensor with multidimensional initialization 
 
-Tensor* tensor_arrange_multidimensional() {
-    return 0;
+Tensor* tensor_arrange_multidimensional(int* dims, int ndims) {
+    int size = 1;
+    for (int i = 0; i<ndims; i++) {
+        size*=dims[i];
+    }
+
+    Storage* storage = create_storage(size);
+    Tensor* t = mallocCheck(sizeof(Tensor));
+    int* dimension = mallocCheck(ndims * sizeof(int));
+    // copy the dims into this dimensions
+    memcpy(dimension, dims, ndims * sizeof(int));
+    t->dims = dimension;
+
+    int* str = compute_strides(dims, ndims);
+    int* strides = mallocCheck(ndims * sizeof(int));
+    memcpy(strides, str, ndims * sizeof(int));
+    t->strides = strides;
+
+    t->offset = 0;
+    // gradient related
+    t->grad = NULL;
+    t->grad_fn = NULL;
+    t->require_grad = false;
+    t->is_leaf = true;
+
+    // other
+    t->repr = NULL;
+
+    return t;
+
 }
 
 int* compute_strides(int* dims, int ndims) {
