@@ -155,16 +155,21 @@ Tensor* tensor_arrange_multidimensional(int* dims, int ndims) {
 
     Storage* storage = create_storage(size);
     Tensor* t = mallocCheck(sizeof(Tensor));
+
+    // Initialize storage with sequential values
+    for (int i = 0; i < size; i++) {
+        set_storage(storage, (float)i, i);  // <-- This was missing!
+    }
+    
     int* dimension = mallocCheck(ndims * sizeof(int));
     // copy the dims into this dimensions
     memcpy(dimension, dims, ndims * sizeof(int));
     t->dims = dimension;
-    t->ndims = ndims;
     int* str = compute_strides(t->dims, ndims);
     int* strides = mallocCheck(ndims * sizeof(int));
     memcpy(strides, str, ndims * sizeof(int));
     t->strides = strides;
-
+    t->ndims = ndims;
     t->offset = 0;
     // gradient related
     t->grad = NULL;
