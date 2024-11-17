@@ -228,20 +228,24 @@ void free_tensor(Tensor* t) {
 
 // Tensor operations
 
-// Tensor* add_tensors(Tensor* t_1, Tensor* t_2) {
-//     if (t_1->ndims != t_2->ndims) {
-//         fprintf(stderr, "The tensors must have the same number of dimensions!");
-//         exit(EXIT_FAILURE);
-//     }
+Tensor* add_tensors(Tensor* t_1, Tensor* t_2) {
+    if (t_1->ndims != t_2->ndims) {
+        fprintf(stderr, "The tensors must have the same number of dimensions!");
+        exit(EXIT_FAILURE);
+    }
 
-//     for (int i = 0; i < t_1->dims; i++) {
-//         if(t_1->dims[i] != t_2->dims[i]) {
-//             fprintf(stderr, "The tensors must have the same dimensionality!");
-//             exit(EXIT_FAILURE);
-//         }
-//     // IMPLEMENET A FUNCTION THAT CAN CREATE A TENSOR WITH DIMS. 
-//     }
-// }
+    for (int i = 0; i < t_1->ndims; i++) {
+        if(t_1->dims[i] != t_2->dims[i]) {
+            fprintf(stderr, "The tensors must have the same dimensionality!");
+            exit(EXIT_FAILURE);
+        } 
+    }
+    Tensor* new_t = tensor_arrange_multidimensional(t_1->dims, t_1->ndims);
+    for(int i = 0; i<new_t->storage->size; i++) {
+        set_storage(new_t->storage, t_1->storage->data[i] + t_2->storage->data[i], i);
+    }
+    return new_t;
+}
 
 // ***** IF YOU SET REPR USE A MALLOC BECAUSE STRING LITERALS GO TO THE 
 // ***** DATA SECTION IN MEMORY AND CANNOT GET FREED!
@@ -277,10 +281,12 @@ int main(int argc, char *argv[]) {
     int dims[] = {3, 3};
     int ndims = 2;
     Tensor* t = tensor_arrange_multidimensional(dims, ndims);
-    for(int i = 0; i < t->dims[0]; i++) {
-        for(int j = 0; j < t->dims[1]; j++) {
+    Tensor* t_2 = tensor_arrange_multidimensional(dims, ndims);
+    Tensor* new = add_tensors(t, t_2);
+    for(int i = 0; i < new->dims[0]; i++) {
+        for(int j = 0; j < new->dims[1]; j++) {
             int idx[] = {i, j};
-            printf("%d ", (int)tensor_getitem(t, idx, 2));
+            printf("%d ", (int)tensor_getitem(new, idx, 2));
         }
         printf("\n");
     }
