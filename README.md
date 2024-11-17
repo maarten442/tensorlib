@@ -3,16 +3,9 @@ A minimal autograd library, implemented in c and wrapped in Python.
 
 # TODO to get the base functionality right:
 
-- Fix the arange function
-- Check what other function torch has to instantiate tensors
-- Make sure there are no memory problems with creation
+The add function currently adds the memory from tensors together, which is not good if you have different views on memory (the actual implementation of the tensor object).
 
-# AFTER:
+- Add broadcasting of tensors
+- Fix the add function with using set_tensor instead of the full underlying memory structure
 
-- Add the operations, add, mul, matmul
-- Add slicing operations on multidimensional tensors
-
-# AFTER THAT:
-
-- Implement the Function node
-- Make sure we can backpropagate gradients
+If this has been fixed we can implement the gradient function for tensor addition and write the python wrapper and build a simple computation graph to check if it works. 
