@@ -159,7 +159,7 @@ Tensor* reshape(Tensor* t, int* dims, int ndims) {
     new_t -> offset = t -> offset;
     new_t -> grad_fn = NULL;
     new_t -> is_leaf = true;
-    new_t -> repr = NULL;
+    new_t->repr = NULL;
 
     return new_t;
 }
