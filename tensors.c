@@ -158,7 +158,7 @@ Tensor* tensor_arrange_multidimensional(int* dims, int ndims) {
 
     // Initialize storage with sequential values
     for (int i = 0; i < size; i++) {
-        set_storage(storage, (float)i, i);  // <-- This was missing!
+        set_storage(storage, (float)i, i);
     }
     t->storage = storage;    
     int* dimension = mallocCheck(ndims * sizeof(int));
@@ -228,6 +228,7 @@ void free_tensor(Tensor* t) {
 
 // Tensor operations
 
+// recall the interface for tensor_setitem: void tensor_setitem(Tensor* t, int* idx, int idx_size, float item)
 Tensor* add_tensors(Tensor* t_1, Tensor* t_2) {
     if (t_1->ndims != t_2->ndims) {
         fprintf(stderr, "The tensors must have the same number of dimensions!");
@@ -244,6 +245,7 @@ Tensor* add_tensors(Tensor* t_1, Tensor* t_2) {
     for(int i = 0; i<new_t->storage->size; i++) {
         set_storage(new_t->storage, t_1->storage->data[i] + t_2->storage->data[i], i);
     }
+    // Use tensor getitem en tensor set item
     return new_t;
 }
 
