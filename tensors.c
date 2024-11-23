@@ -21,6 +21,21 @@ void* malloc_check(int size, char* file, int line) {
 
 #define mallocCheck(size) malloc_check(size, __FILE__, __LINE__)
 
+// Utility functions, taken also from Karpathy
+
+int ceil_div(int a, int b) {
+    // integer division that rounds up, i.e. ceil(a / b)
+    return (a + b - 1) / b;
+}
+
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
 // Function to create actual memory for the arangement of tensors. 
 
 Storage* create_storage(int size) {
@@ -91,6 +106,7 @@ int logical_to_physical(Tensor* t, int* idx, int idx_size) {
 }
 
 float tensor_getitem(Tensor* t, int* idx, int idx_size) {
+    assert(idx_size == t->ndims); 
     int pidx = logical_to_physical(t, idx, idx_size);
     return get_storage(t->storage, pidx);
 }
@@ -202,12 +218,46 @@ Tensor* reshape(Tensor* t, int* dims, int ndims) {
     new_t -> offset = t -> offset;
     new_t -> grad_fn = NULL;
     new_t -> is_leaf = true;
-    new_t->repr = NULL;
+    new_t -> repr = NULL;
 
     return new_t;
 }
 
 // we need a function to free the tensor
+
+Tensor* tensor_slice(Tensor* t, int* start, int* end, int* step) {
+    Tensor* new_t = mallocCheck(sizeof(Tensor));
+    new_t -> storage = t -> storage;
+    new_t -> offset = t -> offset + start[0] * t -> strides[0];
+    new_t -> ndims = t -> ndims;
+    new_t->dims = mallocCheck(t->ndims * sizeof(int));
+    new_t->strides = mallocCheck(t->ndims * sizeof(int));
+    for(int i = 0; i < t->ndims; i++) {
+        if(start[i] < 0) {start[i] = start[i] + t->dims[i];}
+        if(end[i] < 0) {end[i] = end[i] + t->dims[i];}
+        if(step[i] < 0) {
+            fprintf(stderr, "Steps cannot be negative");
+            free(new_t);
+            return tensor_empty(0);
+            }
+        if(step[i] == 0) {
+            fprintf(stderr, "Step cannot be 0");
+            free(new_t);
+            return tensor_empty(0);
+        }
+        start[i] = min(max(start[i], 0), t->dims[i]);
+        end[i] = min(max(end[i], 0), t->dims[i]);
+        new_t -> dims[i] = ceil_div(end[i] - start[i], step[i]);
+        new_t -> strides[i] = t->strides[i] * step[i]; 
+    }
+    storage_incref(t->storage);
+    new_t -> repr = NULL;
+    new_t -> require_grad = t -> require_grad;
+    new_t -> grad_fn = NULL;
+    new_t -> is_leaf = NULL;
+    new_t -> grad = NULL;
+    return new_t;
+}
 
 void free_tensor(Tensor* t) {
     // First check if tensor exists
@@ -287,7 +337,7 @@ int main(int argc, char *argv[]) {
     // free_tensor(t_new);
     int dims[] = {3, 3};
     int ndims = 2;
-    int idx[] = {-3, -3};
+    int idx[] = {-1, -1};
     Tensor* t = tensor_arrange_multidimensional(dims, ndims);
     printf("%f\n", tensor_getitem(t, idx, 2));
     // Tensor* t_2 = tensor_arrange_multidimensional(dims, ndims);
