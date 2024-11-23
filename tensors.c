@@ -73,9 +73,20 @@ void storage_decref(Storage* s) {
 int logical_to_physical(Tensor* t, int* idx, int idx_size) {
     assert(t->ndims == idx_size);
     int result = t->offset;
+
     for(int i = 0; i < t->ndims; i++) {
+        if(idx[i] < 0 && idx[i] + t->dims[i] >= 0) {
+            idx[i] = idx[i] + t->dims[i];
+        }
+
+        if(idx[i] > t->dims[i] || idx[i] < 0) {
+            fprintf(stderr, "IndexError: index %d is out of bounds of %d\n", idx[i], t->dims[i]); 
+            return NAN;
+            }
+
         result += idx[i] * t->strides[i];
     }
+
     return result;   
 }
 
