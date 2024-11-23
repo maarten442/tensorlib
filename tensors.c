@@ -224,6 +224,8 @@ Tensor* reshape(Tensor* t, int* dims, int ndims) {
 }
 
 // we need a function to free the tensor
+// Note that we create a new tensor first, and only after that we perform chekcs on the dims
+// This is a tradeof for the complex case of multidimensional tensors
 
 Tensor* tensor_slice(Tensor* t, int* start, int* end, int* step) {
     Tensor* new_t = mallocCheck(sizeof(Tensor));
@@ -282,6 +284,10 @@ void free_tensor(Tensor* t) {
 }
 
 // Tensor operations
+
+Tensor* tensor_addf(Tensor*, float f) {
+   return 0; 
+}
 
 // recall the interface for tensor_setitem: void tensor_setitem(Tensor* t, int* idx, int idx_size, float item)
 Tensor* add_tensors(Tensor* t_1, Tensor* t_2) {
