@@ -19,12 +19,7 @@ void* malloc_check(int size, char* file, int line) {
     return ptr;
 }
 
-// define macro mallocCheck
-
 #define mallocCheck(size) malloc_check(size, __FILE__, __LINE__)
-
-// Storage physically stores the values in contiguous memory. Can be referenced by multiple tensors. 
-
 
 // Function to create actual memory for the arangement of tensors. 
 
@@ -75,7 +70,8 @@ void storage_decref(Storage* s) {
 
 // Create actual tensors. Torch has many ways of doing this. Let's implement a bunch.
 
-int logical_to_physical(Tensor* t, int* idx) {
+int logical_to_physical(Tensor* t, int* idx, int idx_size) {
+    assert(t->ndims == idx_size);
     int result = t->offset;
     for(int i = 0; i < t->ndims; i++) {
         result += idx[i] * t->strides[i];
@@ -84,15 +80,14 @@ int logical_to_physical(Tensor* t, int* idx) {
 }
 
 float tensor_getitem(Tensor* t, int* idx, int idx_size) {
-    assert(idx_size == t->ndims);
     // TODO add negative index suport
-    int pidx = logical_to_physical(t, idx);
+    int pidx = logical_to_physical(t, idx, idx_size);
     return get_storage(t->storage, pidx);
 }
 
 void tensor_setitem(Tensor* t, int* idx, int idx_size, float item) {
     assert(idx_size == t->ndims);
-    int pidx = logical_to_physical(t, idx);
+    int pidx = logical_to_physical(t, idx, idx_size);
     set_storage(t->storage, item, pidx);
 }
 
