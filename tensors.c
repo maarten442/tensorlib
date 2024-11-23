@@ -91,7 +91,6 @@ int logical_to_physical(Tensor* t, int* idx, int idx_size) {
 }
 
 float tensor_getitem(Tensor* t, int* idx, int idx_size) {
-    // TODO add negative index suport
     int pidx = logical_to_physical(t, idx, idx_size);
     return get_storage(t->storage, pidx);
 }
@@ -288,17 +287,19 @@ int main(int argc, char *argv[]) {
     // free_tensor(t_new);
     int dims[] = {3, 3};
     int ndims = 2;
+    int idx[] = {-3, -3};
     Tensor* t = tensor_arrange_multidimensional(dims, ndims);
-    Tensor* t_2 = tensor_arrange_multidimensional(dims, ndims);
-    Tensor* new = add_tensors(t, t_2);
-    for(int i = 0; i < new->dims[0]; i++) {
-        for(int j = 0; j < new->dims[1]; j++) {
-            int idx[] = {i, j};
-            printf("%d ", (int)tensor_getitem(new, idx, 2));
-        }
-        printf("\n");
-    }
-    free_tensor(t);
-    free_tensor(t_2);
-    free_tensor(new);
+    printf("%f\n", tensor_getitem(t, idx, 2));
+    // Tensor* t_2 = tensor_arrange_multidimensional(dims, ndims);
+    // Tensor* new = add_tensors(t, t_2);
+    // for(int i = 0; i < new->dims[0]; i++) {
+    //     for(int j = 0; j < new->dims[1]; j++) {
+    //         int idx[] = {i, j};
+    //         printf("%d ", (int)tensor_getitem(new, idx, 2));
+    //     }
+    //     printf("\n");
+    // }
+    // free_tensor(t);
+    // free_tensor(t_2);
+    // free_tensor(new);
 }
