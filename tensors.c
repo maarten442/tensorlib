@@ -151,10 +151,15 @@ Tensor* tensor_empty(int ndims, int* dims) {
     return t; 
 }
 
+Tensor* tensor_empty_1d(int size) {
+    int dims[] = {size};
+    return tensor_empty(1, dims);
+}
+
 // torch.arrange()
 
 Tensor* tensor_arrange(int size) {
-    Tensor* t = tensor_empty(size);
+    Tensor* t = tensor_empty_1d(size);
     for(int i = 0; i < size; i++) {
         tensor_setitem(t, &i, 1, (float) i);
     }
@@ -245,12 +250,12 @@ Tensor* tensor_slice(Tensor* t, int* start, int* end, int* step) {
         if(step[i] < 0) {
             fprintf(stderr, "Steps cannot be negative");
             free(new_t);
-            return tensor_empty(0);
+            return tensor_empty_1d(0);
             }
         if(step[i] == 0) {
             fprintf(stderr, "Step cannot be 0");
             free(new_t);
-            return tensor_empty(0);
+            return tensor_empty_1d(0);
         }
         start[i] = min(max(start[i], 0), t->dims[i]);
         end[i] = min(max(end[i], 0), t->dims[i]);
