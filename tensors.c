@@ -117,6 +117,22 @@ void tensor_setitem(Tensor* t, int* idx, int idx_size, float item) {
     set_storage(t->storage, item, pidx);
 }
 
+// Broadcasting tensors
+
+bool is_broadcastable(Tensor* t_1, Tensor* t_2) {
+    int min_dim = t_1 -> ndims < t_2 -> ndims ? t_1 -> ndims : t_2 -> ndims;
+    for(int i = 0; i < min_dim; i++) {
+            int t1_dim = t_1 -> ndims - i - 1;
+            int t2_dim = t_2 -> ndims - i - 1;
+            int t1_dm = t_1 -> dims[t1_dim];
+            int t2_dm = t_2 -> dims[t2_dim];
+            if(t1_dm != t2_dm && (t1_dim != 1 && t2_dm != 1)) {
+                return false;
+            }
+        } 
+        return true;       
+    }
+
 // torch.empty(size);
 
 Tensor* tensor_empty(int ndims, int* dims) {
