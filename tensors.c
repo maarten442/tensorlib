@@ -350,9 +350,23 @@ Tensor* add_tensors(Tensor* t_1, Tensor* t_2) {
         fprintf(stderr, "The tensors are not broadcastable!");
         return NULL;
     }
-    int size_dims = max(t_1 -> ndims, t_2 -> ndims);
-    int* dims = mallocCheck(size_dims * sizeof(int));
 
+    int* new_dims = (t_1 -> ndims > t_2 -> ndims) ? t_1 -> dims : t_2 -> dims;
+    int max_dims = (t_1 -> ndims > t_2 -> ndims) ? t_1 -> ndims : t_2 -> ndims;
+    int min_dims = (t_1 -> ndims < t_2 -> ndims) ? t_1 -> ndims : t_2 -> ndims;
+
+    Tensor* new_t = tensor_empty(max_dims, new_dims);
+
+    int total_elements = 1;
+    for(int i = 0; i < max_dims; i++) {
+        total_elements *= new_dims[i];
+    }
+
+    int* temp_array = mallocCheck(total_elements * sizeof(int));
+    memset(temp_array, 0, max_dims * sizeof(int));
+    for(int i = 0; i < total_elements; i++) {
+        
+    }
 
 }
 
