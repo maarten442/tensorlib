@@ -296,12 +296,35 @@ void free_tensor(Tensor* t) {
 // Tensor operations
 
 Tensor* tensor_addf(Tensor* t, float f) {
-    Tensor* new_t = tensor_arrange_multidimensional(t->storage->size);
-    for(int i = 0; i < t->storage->size; i++) {
-        float old_val = get_storage(t->storage, i);
-        float new_val = old_val + f;
+    Tensor* new_t = tensor_empty(t->ndims, t->dims);
+    
+    // Create array to hold current indices
+    int* idx = mallocCheck(t->ndims * sizeof(int));
+    memset(idx, 0, t->ndims * sizeof(int));  // Initialize to all zeros
+    
+    // Calculate total number of elements
+    int total_elements = 1;
+    for(int i = 0; i < t->ndims; i++) {
+        total_elements *= t->dims[i];
     }
     
+    // Iterate over all elements
+    for(int i = 0; i < total_elements; i++) {
+        float old_val = tensor_getitem(t, idx, t->ndims);
+        float new_val = old_val + f;
+        tensor_setitem(new_t, idx, t->ndims, new_val);
+        
+        // Update indices
+        int d = t->ndims - 1;
+        while(d >= 0) {
+            idx[d]++;
+            if(idx[d] < t->dims[d]) break;
+            idx[d] = 0;
+            d--;
+        }
+    }
+    
+    free(idx);
     return new_t;
 }
 
