@@ -385,6 +385,8 @@ int main(int argc, char *argv[]) {
     int idx[] = {-1, -1};
     Tensor* t = tensor_arrange_multidimensional(dims, ndims);
     printf("%f\n", tensor_getitem(t, idx, 2));
+    Tensor* new_t = tensor_addf(t, 50);
+    printf("%f\n", tensor_getitem(new_t, idx, 2));
     // Tensor* t_2 = tensor_arrange_multidimensional(dims, ndims);
     // Tensor* new = add_tensors(t, t_2);
     // for(int i = 0; i < new->dims[0]; i++) {

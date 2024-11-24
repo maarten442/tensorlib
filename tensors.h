@@ -38,4 +38,7 @@ struct Function {
     void (*backward)(struct Function* self, Tensor* output);
 };
 
+
+int* compute_strides(int* dims, int ndims);
+
 #endif // TENSORS_H
