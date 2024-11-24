@@ -119,21 +119,26 @@ void tensor_setitem(Tensor* t, int* idx, int idx_size, float item) {
 
 // torch.empty(size);
 
-Tensor* tensor_empty(int size) {
+Tensor* tensor_empty(int ndims, int* dims) {
     // Assert is already done in creating the memory.
-    // Create underlying storage. 
-    Storage* s = create_storage(size);
+    // Create underlying storage.
+    int mem_size = 1;
+    for(int i = 0; i < ndims; i++) {
+        mem_size *= dims[i];
+    }
+
+    Storage* s = create_storage(mem_size);
     Tensor* t = mallocCheck(sizeof(Tensor));
 
     t->storage = s;
     // dimensionality
 
-    t->dims = mallocCheck(sizeof(int)); 
-    t->dims[0] = size; // 3 x 3 x 4 for example.
-    t->ndims = 1;
+    t->dims = mallocCheck(sizeof(int) * ndims); 
+    memcpy(t->dims, dims, ndims * sizeof(int)); // 3 x 3 x 4 for example.
+    t->ndims = ndims;
     t->offset = 0;
-    t->strides = mallocCheck(sizeof(int));
-    t->strides[0] = 1;
+    t->strides = mallocCheck(sizeof(int) * ndims);
+    memcpy(t->strides, compute_strides(t->dims, ndims), ndims * sizeof(int));
 
     // gradient related
     t->grad = NULL;
@@ -285,8 +290,14 @@ void free_tensor(Tensor* t) {
 
 // Tensor operations
 
-Tensor* tensor_addf(Tensor*, float f) {
-   return 0; 
+Tensor* tensor_addf(Tensor* t, float f) {
+    Tensor* new_t = tensor_arrange_multidimensional(t->storage->size);
+    for(int i = 0; i < t->storage->size; i++) {
+        float old_val = get_storage(t->storage, i);
+        float new_val = old_val + f;
+    }
+    
+    return new_t;
 }
 
 // recall the interface for tensor_setitem: void tensor_setitem(Tensor* t, int* idx, int idx_size, float item)
