@@ -258,8 +258,8 @@ Tensor* tensor_slice(Tensor* t, int* start, int* end, int* step) {
     new_t -> storage = t -> storage;
     new_t -> offset = t -> offset + start[0] * t -> strides[0];
     new_t -> ndims = t -> ndims;
-    new_t->dims = mallocCheck(t->ndims * sizeof(int));
-    new_t->strides = mallocCheck(t->ndims * sizeof(int));
+    new_t -> dims = mallocCheck(t->ndims * sizeof(int));
+    new_t -> strides = mallocCheck(t->ndims * sizeof(int));
     for(int i = 0; i < t->ndims; i++) {
         if(start[i] < 0) {start[i] = start[i] + t->dims[i];}
         if(end[i] < 0) {end[i] = end[i] + t->dims[i];}
@@ -346,23 +346,14 @@ Tensor* tensor_addf(Tensor* t, float f) {
 
 // recall the interface for tensor_setitem: void tensor_setitem(Tensor* t, int* idx, int idx_size, float item)
 Tensor* add_tensors(Tensor* t_1, Tensor* t_2) {
-    if (t_1->ndims != t_2->ndims) {
-        fprintf(stderr, "The tensors must have the same number of dimensions!");
-        exit(EXIT_FAILURE);
+    if (!is_broadcastable(t_1, t_2)) {
+        fprintf(stderr, "The tensors are not broadcastable!");
+        return NULL;
     }
+    int size_dims = max(t_1 -> ndims, t_2 -> ndims);
+    int* dims = mallocCheck(size_dims * sizeof(int));
 
-    for (int i = 0; i < t_1->ndims; i++) {
-        if(t_1->dims[i] != t_2->dims[i]) {
-            fprintf(stderr, "The tensors must have the same dimensionality!");
-            exit(EXIT_FAILURE);
-        } 
-    }
-    Tensor* new_t = tensor_arrange_multidimensional(t_1->dims, t_1->ndims);
-    for(int i = 0; i<new_t->storage->size; i++) {
-        set_storage(new_t->storage, t_1->storage->data[i] + t_2->storage->data[i], i);
-    }
-    // Use tensor getitem en tensor set item
-    return new_t;
+
 }
 
 // ***** IF YOU SET REPR USE A MALLOC BECAUSE STRING LITERALS GO TO THE 

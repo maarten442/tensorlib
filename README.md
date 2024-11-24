@@ -7,5 +7,37 @@ The add function currently adds the memory from tensors together, which is not g
 
 - Add broadcasting of tensors
 - Fix the add function with using set_tensor instead of the full underlying memory structure
+- Add floating point addition to tensors
+- Write tensor to string
+- Write the relevant tensor operations: addition, multiplication, scalar multiplication. This is important for autograd.
 
-If this has been fixed we can implement the gradient function for tensor addition and write the python wrapper and build a simple computation graph to check if it works. 
+I asked Claude to give me a plan for this, and I for sure need to implement the following:
+
+Before implementing autograd, you'll need to add several key components:
+
+Essential Tensor Operations:
+Element-wise operations (I've provided multiplication, you already have addition)
+Matrix multiplication (matmul)
+Basic activation functions (ReLU, sigmoid, tanh)
+Reduction operations (sum, mean)
+Power/exponentiation operations
+Division operations
+Gradient-Related Structures:
+Extend the Tensor struct to track gradient information
+Add AutogradFunction structure for backward passes
+Implement backward functions for each operation
+Memory Management Updates:
+Enhanced reference counting for gradients
+Proper cleanup of autograd functions
+Memory management for saved tensors
+Key Features Needed:
+Ability to enable/disable gradient computation
+Gradient accumulation
+Detaching tensors from computation graph
+Zero_grad functionality
+Backward pass implementation
+The code I've provided gives you a starting point for these features. To fully implement autograd, you'll need to:
+
+# Plan for gradients in computation graph:
+
+- TBD
