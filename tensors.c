@@ -362,10 +362,10 @@ Tensor* add_tensors(Tensor* t_1, Tensor* t_2) {
         total_elements *= new_dims[i];
     }
 
-    int* temp_array = mallocCheck(total_elements * sizeof(int));
+    int* temp_array = mallocCheck(max_dims * sizeof(int));
     memset(temp_array, 0, max_dims * sizeof(int));
     for(int i = 0; i < total_elements; i++) {
-        
+
     }
 
 }
