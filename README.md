@@ -1,5 +1,10 @@
 # tensorlib
-A minimal autograd library, implemented in c and wrapped in Python. 
+
+The goal is to create a tensor library that supports the computation of automatic gradients. 
+
+We need to create memory, and save tensors contiguously in memory. Views hold pointers to the actual tensor object. 
+
+The goal is to first build these general capabilities, and later add the gradient computation. 
 
 # TODO to get the base functionality right:
 
