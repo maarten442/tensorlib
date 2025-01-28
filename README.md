@@ -6,7 +6,7 @@ We need to create memory, and save tensors contiguously in memory. Views hold po
 
 The goal is to first build these general capabilities, and later add the gradient computation. 
 
-Note: gradients needs nodes.
+Note: gradients needs nodes. See adjusted plan
 
 # TODO to get the base functionality right:
 
