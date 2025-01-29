@@ -30,3 +30,27 @@ Storage* storage_new(int size) {
     storage->ref_count = 1; // upon creation there is one reference.
     return storage;
 }
+
+void set_storage(int idx, float value, Storage* storage) {
+    assert(idx > 0 && idx <= storage->size);
+    storage->data[idx] = value;
+}
+
+float get_storage(int idx, Storage* storage) {
+    assert(idx > 0 && idx <= storage->size);
+    return storage->data[idx];
+}
+
+void incr_reference(Storage* storage) {
+    storage->ref_count++;
+}
+
+void decr_reference(Storage* storage) {
+    storage->ref_count--;
+    if (storage->ref_count == 0) {
+        free(storage->data);
+        free(storage);
+    }
+}
+
+// Tensor & tensor operations, views on the contiguous storage.
